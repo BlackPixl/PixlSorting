@@ -1,0 +1,6 @@
+venv/
+*.jpg
+*.png
+functions.py
+parameters.py
+.idea/
