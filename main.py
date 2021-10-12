@@ -13,30 +13,26 @@ def arguments():
                         type=str)
 
     parser.add_argument("-o",
-                        "--output",
                         type=str,
                         default="output.png")
 
     parser.add_argument("-t",
-                        "--threshold",
-                        type=int,
+                        type=float,
                         default=150,
                         help="Sets the point where the script starts sorting the pixels.")
 
     parser.add_argument("-f",
-                        "--function",
                         type=str,
-                        default="brightness",
+                        default="hue",
+                        choices = {"brightness, red, green, blue, hue"},
                         help="Sets the function for the sorting script, \
                          accepted values: brightness,reds, blues, greens")
 
     parser.add_argument("-i",
-                        "--interval_length",
                         type=int,
-                        help="Sets maximum interval lenght to sort")
+                        help="Sets maximum interval lenght to the image, by default is the whole width or height")
 
     parser.add_argument('-v',
-                        '--vertical',
                         action='store_true',
                         help='Sets the pixel sorting vertical (Default is Horizontal)')
 
@@ -44,13 +40,12 @@ def arguments():
 
     return {
         "input": arguments.input,
-        "output": arguments.output,
-        "threshold": arguments.threshold,
-        "function": arguments.function,
-        "interval_length": arguments.interval_length,
-        "orientation":arguments.vertical
+        "output": arguments.o,
+        "threshold": arguments.t,
+        "function": arguments.f,
+        "interval_length": arguments.i,
+        "orientation": arguments.v
     }
-
 
 def brightness(r_g_b):
     r = r_g_b[0]
@@ -60,15 +55,21 @@ def brightness(r_g_b):
     return bright
 
 
-def reds(r_g_b):
+def hue(r_g_b):
+    r, g, b= r_g_b[:3]
+    hue_value = rgb_to_hsv(r/255, g/255, b/255)
+    return hue_value[0]
+
+
+def red(r_g_b):
     return r_g_b[0]
 
 
-def greens(r_g_b):
+def green(r_g_b):
     return r_g_b[1]
 
 
-def blues(r_g_b):
+def blue(r_g_b):
     return r_g_b[2]
 
 
@@ -100,7 +101,19 @@ interval = args.pop("interval_length")
 orientation = args.pop("orientation")
 
 # TODO: User logger instead of print
-print('Welcome to PixlSort.\ninput: %s\noutput: %s\nthreshold: %d\n' % (input_image, output_image, threshold))
+print('Welcome to PixlSort.\ninput: %s\noutput: %s\nthreshold: %f\n' % (input_image, output_image, threshold))
+
+if function == 'hue':
+    sorting_function = hue
+elif function == 'red':
+    sorting_function = red
+elif function == 'green':
+    sorting_function = green
+elif function == 'blue':
+    sorting_function = blue
+elif function == 'brightness':
+    sorting_function = brightness
+
 
 with Image.open(input_image) as im:
     if orientation:
@@ -125,7 +138,7 @@ for y in range(height):
         pixel = px[x, y]
         a = x + 1
         pxls = 0
-        while brightness(pixel) < threshold:
+        while sorting_function(pixel) < threshold:
             temSort.append(pixel)
             if a >= width:
                 break
@@ -136,7 +149,7 @@ for y in range(height):
         pxls = 0
         if temSort:
             a = x
-            temSort = quicksort(temSort, brightness)
+            temSort = quicksort(temSort, sorting_function)
             for i in range(len(temSort)):
                 px[a, y] = temSort[i]
                 a += 1
