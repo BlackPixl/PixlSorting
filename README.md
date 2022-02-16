@@ -4,7 +4,7 @@ A Python console app, made to perform pixel sorting style image manipulation.
 more info and examples at the [PixelSorting subreddit](https://www.reddit.com/r/pixelsorting/).
 
 ## Tools used
-* PIL library from pillow
+* PIL library from pillow.
 
 ## Installation
 ```console
@@ -49,7 +49,7 @@ While sorting by red, blue, green and brigness the ideal values for the threshol
 
 While  sorting by hue, the ideal values to use for the threshold are from 0 to 1.
 
-The threshold is set to 100 by default
+The threshold is set to 100 by default.
 
 ## Examples:
 ```console
@@ -59,4 +59,4 @@ python3 pixlsorting input1.png -o output1.png -t 215 -f brightness -v
 ```console
 python3 pixlsorting input2.png -o output2.png -t 57 -f brightness -v
 ```
-Play with all available options to see what results can you get!
+Play with all posible options to see what results can you get!

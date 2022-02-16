@@ -1,15 +1,11 @@
 from PIL import Image
 from random import randint
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from argparse import ArgumentParser
 from colorsys import rgb_to_hsv
 
-module_name = "PixlSort: A simple pixel sorter for .jpg and .png images"
-# Defining parameters:
+# Defining arguments to be passed:
 def arguments():
-    parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter,
-                            description=f"{module_name}")
-#    parser = ArgumentParser(description="",
-#                            usage="PixlSorting <input> <options>")
+    parser = ArgumentParser(description="PixlSort: A simple pixel sorter for .jpg and .png images")
 
     parser.add_argument("input",
                         type=str)
@@ -60,6 +56,7 @@ def arguments():
         "orientation": arguments.vertical
     }
 
+#defining functions from which to make the processing
 def brightness(r_g_b):
     r = r_g_b[0]
     g = r_g_b[1]
