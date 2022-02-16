@@ -1,50 +1,63 @@
 from PIL import Image
 from random import randint
-from argparse import ArgumentParser
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from colorsys import rgb_to_hsv
 
+module_name = "PixlSort: A simple pixel sorter for .jpg and .png images"
 # Defining parameters:
-# python3 main.py avatar_illustration_cheese.png -t 215 -f brightness -v
 def arguments():
-    parser = ArgumentParser(description="A simple pixel sorter for .jpg and .png images",
-                            usage="PixlSorting <input> <options>")
+    parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter,
+                            description=f"{module_name}")
+#    parser = ArgumentParser(description="",
+#                            usage="PixlSorting <input> <options>")
 
     parser.add_argument("input",
                         type=str)
 
-    parser.add_argument("-o",
+    parser.add_argument("--output",
+                        "-o",
+                        dest="output",
                         type=str,
-                        default="output.png")
+                        default="output.png",
+                        help="Sets the name of the processed image.")
 
-    parser.add_argument("-t",
+    parser.add_argument("--threshold",
+                        "-t",
+                        dest="threshold",
                         type=float,
-                        default=50,
+                        default=100,
                         help="Sets the threshold value of pixels to sort.")
 
-    parser.add_argument("-f",
+    parser.add_argument("--function",
+                        "-f",
+                        dest="function",
                         type=str,
                         default="brightness",
                         choices = {"brightness", "red", "green", "blue", "hue"},
                         help="Sets the function for the sorting script, \
-                         accepted values: brightness,red, blue, green and hue")
+                         accepted values: brightness,red, blue, green and hue.")
 
-    parser.add_argument("-i",
+    parser.add_argument("--interval",
+                        "-i",
+                        dest="interval",
                         type=int,
-                        help="Sets the maximum lenght of the sorting intervals, by default is the whole width or height of the image.\n(Under Construction)")
+                        help="Sets the maximum lenght of the sorting intervals, by default is the whole width or height of the image (Under Construction).")
 
-    parser.add_argument('-v',
+    parser.add_argument("--vertical",
+                        "-v",
+                        dest="vertical",
                         action='store_true',
-                        help='Sets the pixel sorting vertical (Default is Horizontal)')
+                        help='Sets the pixel sorting vertical (Default is Horizontal).')
 
     arguments = parser.parse_args()
 
     return {
         "input": arguments.input,
-        "output": arguments.o,
-        "threshold": arguments.t,
-        "function": arguments.f,
-        "interval_length": arguments.i,
-        "orientation": arguments.v
+        "output": arguments.output,
+        "threshold": arguments.threshold,
+        "function": arguments.function,
+        "interval_length": arguments.interval,
+        "orientation": arguments.vertical
     }
 
 def brightness(r_g_b):
