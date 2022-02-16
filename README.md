@@ -11,7 +11,7 @@ more info and examples at the [PixelSorting subreddit](https://www.reddit.com/r/
 # clone the repo
 $ git clone https://github.com/BlackPixl/PixlSorting.git
 
-# change the working directory to sherlock
+# change the working directory to PixlSorting
 $ cd PixlSorting
 
 # install the requirements
