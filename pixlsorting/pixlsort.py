@@ -3,10 +3,8 @@ from random import randint
 from argparse import ArgumentParser
 from colorsys import rgb_to_hsv
 
-
 # Defining parameters:
 # python3 main.py avatar_illustration_cheese.png -t 215 -f brightness -v
-
 def arguments():
     parser = ArgumentParser(description="A simple pixel sorter for .jpg and .png images",
                             usage="PixlSorting <input> <options>")
@@ -32,7 +30,7 @@ def arguments():
 
     parser.add_argument("-i",
                         type=int,
-                        help="Sets the maximum lenght of the sorting intervals, by default is the whole width or height of the image.")
+                        help="Sets the maximum lenght of the sorting intervals, by default is the whole width or height of the image.\n(Under Construction)")
 
     parser.add_argument('-v',
                         action='store_true',
@@ -94,79 +92,86 @@ def quicksort(array, function):
     return quicksort(low, function) + same + quicksort(high, function)
 
 
-args = arguments()
-input_image = args.pop("input")
-output_image = args.pop("output")
-threshold = args.pop("threshold")
-function = args.pop("function")
-interval = args.pop("interval_length")
-orientation = args.pop("orientation")
 
-print('Welcome to PixlSort.\ninput: %s\noutput: %s\nthreshold: %f\nsorting by: %s\n' % (input_image, output_image, threshold, function))
+def main():
+    args = arguments()
+    input_image = args.pop("input")
+    output_image = args.pop("output")
+    threshold = args.pop("threshold")
+    function = args.pop("function")
+    interval = args.pop("interval_length")
+    orientation = args.pop("orientation")
 
-if function == 'hue':
-    sorting_function = hue
-elif function == 'red':
-    sorting_function = red
-elif function == 'green':
-    sorting_function = green
-elif function == 'blue':
-    sorting_function = blue
-elif function == 'brightness':
-    sorting_function = brightness
+    print('Welcome to PixlSort.\ninput: %s\noutput: %s\nthreshold: %f\nsorting by: %s\n'% (input_image, output_image, threshold, function))
+
+    if function == 'hue':
+        sorting_function = hue
+    elif function == 'red':
+        sorting_function = red
+    elif function == 'green':
+        sorting_function = green
+    elif function == 'blue':
+        sorting_function = blue
+    elif function == 'brightness':
+        sorting_function = brightness
 
 
-with Image.open(input_image) as im:
-    if orientation:
-        im = im.rotate(90, expand=True)
+    with Image.open(input_image) as im:
+        if orientation:
+            im = im.rotate(90, expand=True)
 
-    px = im.load()
-    width = im.width
-    height = im.height
-    if not interval:
-        interval = im.width
+        px = im.load()
+        width = im.width
+        height = im.height
+        if not interval:
+            interval = im.width
 
-print("width %s" % width)
-print("height %s" % height)
-print("sorting...")
+    print("width %s" % width)
+    print("height %s" % height)
+    print("sorting...")
 
-temSort = []
-rows = 1
-x = 0
-for y in range(height):
-    while x < width:
-        pixel = px[x, y]
-        a = x + 1
-        pxls = 0
-        while sorting_function(pixel) < threshold:
-            temSort.append(pixel)
-            if a >= width:
-                break
-            else:
-                pixel = px[a, y]
-                a += 1
-            pxls += 1
-        pxls = 0
-        if temSort:
-            a = x
-            temSort = quicksort(temSort, sorting_function)
-            for i in range(len(temSort)):
-                px[a, y] = temSort[i]
-                a += 1
-            x = a - 1
-        x += 1
-        temSort = []
+    temSort = []
+    rows = 1
     x = 0
+    for y in range(height):
+        while x < width:
+            pixel = px[x, y]
+            a = x + 1
+            pxls = 0
+            while sorting_function(pixel) < threshold:
+                temSort.append(pixel)
+                if a >= width:
+                    break
+                else:
+                    pixel = px[a, y]
+                    a += 1
+                pxls += 1
+            pxls = 0
+            if temSort:
+                a = x
+                temSort = quicksort(temSort, sorting_function)
+                for i in range(len(temSort)):
+                    px[a, y] = temSort[i]
+                    a += 1
+                x = a - 1
+            x += 1
+            temSort = []
+        x = 0
 
-final = []
-for y in range(height):
-    for x in range(width):
-        final.append(px[x, y])
+    final = []
+    for y in range(height):
+        for x in range(width):
+            final.append(px[x, y])
 
-newimage = Image.new(mode="RGB", size=(width, height))
-newimage.putdata(final)
-if orientation:
-    newimage = newimage.rotate(-90, expand=True)
-newimage.save(output_image, "PNG")
-im.close()
-newimage.close()
+    newimage = Image.new(mode="RGB", size=(width, height))
+    newimage.putdata(final)
+    if orientation:
+        newimage = newimage.rotate(-90, expand=True)
+    newimage.save(output_image, "PNG")
+    im.close()
+    newimage.close()
+    print('Image succesfully processed.')
+
+
+if __name__=="__main__":
+    main()
