@@ -1,10 +1,10 @@
 # PixlSorting
 A Python console app, made to perform pixel sorting style image manipulation.
 
-more info and examples at the [PixelSorting subreddit](https://www.reddit.com/r/pixelsorting/).
+More info and examples at the [PixelSorting subreddit](https://www.reddit.com/r/pixelsorting/).
 
 ## Tools used
-* PIL library from pillow.
+* [Python Imaging Library (PIL)](https://python-pillow.org).
 
 ## Installation
 ```console
@@ -45,7 +45,7 @@ optional arguments:
   --vertical, -v        Sets the pixel sorting vertical (Default is Horizontal).
 ```
 ## Note:
-While sorting by red, blue, green and brigness the ideal values for the threshold are from 0 to 255.
+While sorting by red, blue, green and brightness, the ideal values for the threshold are from 0 to 255.
 
 While  sorting by hue, the ideal values to use for the threshold are from 0 to 1.
 
@@ -59,4 +59,4 @@ python3 pixlsorting input1.png -o output1.png -t 215 -f brightness -v
 ```console
 python3 pixlsorting input2.png -o output2.png -t 57 -f brightness -v
 ```
-Play with all posible options to see what results can you get!
+Play with all possible options to see what results can you get!
